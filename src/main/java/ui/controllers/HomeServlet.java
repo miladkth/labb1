@@ -1,6 +1,8 @@
 package ui.controllers;
 
 
+import bo.handlers.FileUploadService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +16,10 @@ public class HomeServlet extends HttpServlet {
     public void init() {}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        //FileUploadService.Upload();
         res.setContentType("text/html");
         PrintWriter out = res.getWriter();
-        out.println("<h1>requrest to get /homeservlet</h1>");
+        out.println("<h1>requrest to get /homeservlet upload test</h1>");
 
     }
 }

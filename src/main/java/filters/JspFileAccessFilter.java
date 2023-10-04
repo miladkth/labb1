@@ -12,7 +12,10 @@ public class JspFileAccessFilter implements Filter {
 
         if(uri.equals("/")){
             request.getRequestDispatcher("/home").forward(request, response);
-        }else{
+        } else if (uri.equals("/upload.jsp")) {
+            request.getRequestDispatcher("/upload.jsp").forward(request, response);
+        }
+        else{
             req.setAttribute("error", "Access to .jsp files denied");
             req.setAttribute("src", uri);
             request.getRequestDispatcher("error.jsp").forward(request, response);

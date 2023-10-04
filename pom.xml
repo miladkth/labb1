@@ -17,6 +17,20 @@
         <junit.version>5.8.1</junit.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/bom -->
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>2.20.94</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -52,6 +66,12 @@
             <artifactId>java-uuid-generator</artifactId>
             <version>4.1.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/s3 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
