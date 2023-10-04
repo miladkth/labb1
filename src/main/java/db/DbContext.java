@@ -7,6 +7,7 @@ import java.sql.SQLException;
 public class DbContext{
     protected Connection con;
     public ProductDB productDb;
+    public UserDB userDb;
     protected DbContext() throws DbException {
         try {
             this.con = DbManager.getConnection();
@@ -14,6 +15,7 @@ public class DbContext{
             throw new DbException("CAN NOT GET CONNECTION: " + e.getMessage());
         }
         this.productDb = new ProductDB(con);
+        this.userDb = new UserDB(con);
     }
     public void startTransaction() throws DbException {
         try{

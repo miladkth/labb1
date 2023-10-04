@@ -3,7 +3,9 @@ package ui.controllers;
 /*import java.io.*;*/
 
 import bo.entities.Product;
+import bo.entities.User;
 import bo.handlers.ProductService;
+import bo.handlers.UserService;
 import db.DbContext;
 import db.exceptions.DbException;
 
@@ -29,6 +31,8 @@ public class TestServlet extends HttpServlet {
         Collection<Product> items = null;
         try {
             items = ProductService.getItems();
+            UserService.getUserInfo("c21f765f-236b-425e-9267-271e67fdd96e");
+            System.out.println("done creating user");
         } catch (DbException e) {
             throw new RuntimeException(e);
         }

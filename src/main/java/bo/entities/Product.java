@@ -81,4 +81,16 @@ public class Product {
     public String getImgUrl() {
         return imgUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", imgUrl='" + imgUrl + '\'' +
+                '}';
+    }
 }

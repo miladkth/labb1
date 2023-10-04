@@ -6,11 +6,7 @@ import db.exceptions.DbException;
 
 import java.util.Collection;
 
-public class ProductService extends DbContext{
-    protected ProductService() throws DbException {
-
-    }
-
+public class ProductService{
     public static void addItem (Product newItem) throws DbException {
 
     }
