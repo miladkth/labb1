@@ -6,14 +6,14 @@ import java.sql.SQLException;
 
 public class DbContext{
     protected Connection con;
-    public ItemDB itemDb;
+    public ProductDB productDb;
     public DbContext() throws DbException {
         try {
             this.con = DbManager.getConnection();
         } catch (SQLException e){
             throw new DbException("CAN NOT GET CONNECTION: " + e.getMessage());
         }
-        this.itemDb = new ItemDB(con);
+        this.productDb = new ProductDB(con);
     }
     public void startTransaction() throws DbException {
         try{

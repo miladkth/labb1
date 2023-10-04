@@ -2,50 +2,83 @@ package bo.entities;
 
 import java.util.UUID;
 
-public class Item {
+public class Product {
     private String id;
-    private String descr;
-    private String name;
-
-    public Item(String descr, String name){
-        this.id = UUID.randomUUID().toString();
-        this.descr = descr;
-        this.name = name;
+    private String description;
+    private String title;
+    private int quantity;
+    private float price;
+    private String imgUrl;
+    public Product() {
+        this.id = "";
+        this.description = "";
+        this.title = "";
+        this.quantity = 12;
+        this.price = 12;
+        this.imgUrl = "";
     }
-    public Item(String id, String descr, String name){
+    public Product(String id, String title, String description, int quantity, float price, String imgUrl) {
         this.id = id;
-        this.descr = descr;
-        this.name = name;
+        this.description = description;
+        this.title = title;
+        this.quantity = quantity;
+        this.price = price;
+        this.imgUrl = imgUrl;
     }
-    public String getName(){
-        return this.name;
+    public Product(String title, String description, int quantity, float price, String imgUrl) {
+        this.id = UUID.randomUUID().toString();
+        this.description = description;
+        this.title = title;
+        this.quantity = quantity;
+        this.price = price;
+        this.imgUrl = imgUrl;
     }
-    public String getId(){
-        return this.id;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setDescr(String descr) {
-        this.descr = descr;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTitle(){
-        return this.descr;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id='" + id + '\'' +
-                ", descr='" + descr + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
     }
 }

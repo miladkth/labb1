@@ -1,10 +1,9 @@
 package ui.controllers;
 
 /*import java.io.*;*/
-import bo.entities.Item;
-import bo.handlers.ItemService;
-import db.DbContext;
-import db.DbManager;
+
+import bo.entities.Product;
+import bo.handlers.ProductService;
 import db.exceptions.DbException;
 
 import javax.servlet.*;
@@ -12,11 +11,10 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.util.Collection;
 
-@WebServlet(name = "TestServervlet", value = "/TestServervlet")
-public class TestServervlet extends HttpServlet {
+@WebServlet(name = "TestServlet", value = "/TestServlet")
+public class TestServlet extends HttpServlet {
 
     private String message;
 
@@ -27,18 +25,16 @@ public class TestServervlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-            //Collection<Item> items = ItemService.getItems();
+        Collection<Product> items = null;
+        try {
+            items = ProductService.getItems();
+        } catch (DbException e) {
+            throw new RuntimeException(e);
+        }
 
-            //items.forEach(i ->{
-            //    System.out.println(i.toString());
-            //});
 
-
-
-        response.setContentType("text/html");
-        request.getSession().setAttribute("test", "this is test session");
-        PrintWriter out = response.getWriter();
-        out.println("<h1>requrest to get/testservlet</h1>");
+        request.setAttribute("items", items);
+        request.getRequestDispatcher("/items.jsp").forward(request, response);
     }
 
     @Override

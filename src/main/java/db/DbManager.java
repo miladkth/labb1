@@ -7,10 +7,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DbManager {
+class DbManager {
     private static DbManager instance;
     private ArrayList<Connection> connections;
-    private String dbUrl = "jdbc:mysql://shop-lab.cp4uwsoxtikt.eu-north-1.rds.amazonaws.com:3306/test";
+    private String dbUrl = "jdbc:mysql://shop-lab.cp4uwsoxtikt.eu-north-1.rds.amazonaws.com:3306/webshop";
     private String username = "admin";
     private String password = "123456789";
 

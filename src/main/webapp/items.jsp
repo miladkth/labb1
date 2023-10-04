@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: taquang
@@ -7,10 +8,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+<head>
+    <title>items</title>
+</head>
+<body>
+<ul>
+<c:forEach items="${items}" var="item">
+    <li>${item.id}, ${item.title}, ${item.price}</li>
+</c:forEach>
+</ul>
+</body>
 </html>
