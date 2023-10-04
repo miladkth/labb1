@@ -27,18 +27,13 @@ public class TestServervlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        try {
-            Collection<Item> items = ItemService.getItems();
+            //Collection<Item> items = ItemService.getItems();
 
-            items.forEach(i ->{
-                System.out.println(i.toString());
-            });
+            //items.forEach(i ->{
+            //    System.out.println(i.toString());
+            //});
 
-        } catch (DbException e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+
 
         response.setContentType("text/html");
         request.getSession().setAttribute("test", "this is test session");

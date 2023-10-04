@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.Vector;
 
-public class ItemDB{
+public class ProductDB{
     private Connection conn;
-    protected ItemDB(Connection conn){
+    protected ProductDB(Connection conn){
         this.conn = conn;
     }
     public Collection<Item> getAll() throws DbException{
