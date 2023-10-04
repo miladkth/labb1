@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DbContext{
     protected Connection con;
     public ProductDB productDb;
-    public DbContext() throws DbException {
+    protected DbContext() throws DbException {
         try {
             this.con = DbManager.getConnection();
         } catch (SQLException e){

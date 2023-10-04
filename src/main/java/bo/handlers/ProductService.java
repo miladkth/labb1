@@ -6,27 +6,32 @@ import db.exceptions.DbException;
 
 import java.util.Collection;
 
-public class ProductService {
+public class ProductService extends DbContext{
+    protected ProductService() throws DbException {
+
+    }
+
     public static void addItem (Product newItem) throws DbException {
 
     }
     public static Collection<Product> getItems () throws DbException{
-        DbContext db = new DbContext();
+        DbHandler db = new DbHandler();
+
         Collection<Product> items;
         try{
-            db.startTransaction();
+            //db.startTransaction();
 
-            db.productDb.insertSingle(new Product("product 1", "description for product 1", 11, 99.91F, "html.noimge"));
-            db.productDb.insertSingle(new Product("product 2", "description for product 2", 12, 99.92F, "html.noimge"));
-            db.productDb.insertSingle(new Product("product 3", "description for product 3", 13, 99.93F, "html.noimge"));
+            //db.productDb.insertSingle(new Product("product 1", "description for product 1", 11, 99.91F, "html.noimge"));
+            //db.productDb.insertSingle(new Product("product 2", "description for product 2", 12, 99.92F, "html.noimge"));
+            //db.productDb.insertSingle(new Product("product 3", "description for product 3", 13, 99.93F, "html.noimge"));
 
-            db.commitTransaction();
+            //db.commitTransaction();
             items = db.productDb.getAll();
         }catch (DbException e){
-            db.rollbackTransaction();
+            //db.rollbackTransaction();
             throw e;
         } finally {
-            db.endTransaction();
+            //db.endTransaction();
             db.release();
         }
         return items;

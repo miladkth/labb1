@@ -4,6 +4,7 @@ package ui.controllers;
 
 import bo.entities.Product;
 import bo.handlers.ProductService;
+import db.DbContext;
 import db.exceptions.DbException;
 
 import javax.servlet.*;
