@@ -10,18 +10,19 @@ import java.util.ArrayList;
 class DbManager {
     private static DbManager instance;
     private ArrayList<Connection> connections;
-    private String dbUrl = "jdbc:mysql://shop-lab.cp4uwsoxtikt.eu-north-1.rds.amazonaws.com:3306/webshop";
-    private String username = "admin";
-    private String password = "123456789";
 
     private DbManager(){
         try{
             connections = new ArrayList<>();
+            String username = System.getenv("DB_USER_NAME");
+            String pwd = System.getenv("DB_PASSWORD");
+            String url = System.getenv("DB_URL_STRING");
+            String db_name = "webshop";
 
             int count = 5;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             for (int i = 0; i < count; i++) {
-                Connection con = DriverManager.getConnection(this.dbUrl, this.username, this.password);
+                Connection con = DriverManager.getConnection(url+db_name, username, pwd);
                 connections.add(con);
             }
 

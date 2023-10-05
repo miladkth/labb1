@@ -17,7 +17,10 @@ import java.util.UUID;
 public class FileUploadService {
     static public String Upload(String filename, InputStream inputStream) throws IOException {
         String bucketname = "tquangsbucket";
-        AwsBasicCredentials cred = AwsBasicCredentials.create("AKIATBS6YZGJ5ZDTX7W5","8w/PLQnmn9gFeCl+yFuyZFNgSIp7pJZWnAsivpam");
+        String accesskeyId = System.getenv("AWS_ACCESS_KEY");
+        String secret = System.getenv("AWS_SECRET_ACCESS_KEY");
+
+        AwsBasicCredentials cred = AwsBasicCredentials.create(accesskeyId,secret);
         AwsCredentialsProvider credProvider = StaticCredentialsProvider.create(cred);
 
         String imgId = UUID.randomUUID().toString();
