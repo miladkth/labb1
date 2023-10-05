@@ -8,6 +8,7 @@ public class DbContext{
     protected Connection con;
     public ProductDB productDb;
     public UserDB userDb;
+    public OrderDB orderDB;
     protected DbContext() throws DbException {
         try {
             this.con = DbManager.getConnection();
@@ -16,6 +17,7 @@ public class DbContext{
         }
         this.productDb = new ProductDB(con);
         this.userDb = new UserDB(con);
+        this.orderDB = new OrderDB(con);
     }
     public void startTransaction() throws DbException {
         try{

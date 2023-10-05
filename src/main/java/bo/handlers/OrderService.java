@@ -1,33 +1,34 @@
 package bo.handlers;
 
-import bo.entities.User;
+import bo.entities.Order;
 import db.exceptions.DbException;
 
 import java.util.Collection;
 
-public class UserService {
+public class OrderService {
 
-    public static void createUser(User user) throws DbException {
+    public static void createOrder(Order order) throws DbException {
         try {
             DbHandler db = new DbHandler();
 
-            db.userDb.insertSingle(user);
+            int a = db.orderDB.insertSingle(order);
+            System.out.println("insertSingle " + a + "---------------");
         } catch (DbException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
+            throw e;
         }
     }
 
-    public static User getUserInfo(String id) throws DbException {
+    public static Collection<Order> getAllOrders() throws DbException {
         try {
             DbHandler db = new DbHandler();
 
-            Collection<User> users = db.userDb.getUserById(id);
-            return users.iterator().next();
+            return db.orderDB.getAll();
         } catch (DbException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-            throw new DbException(e.getMessage());
+            throw e;
         }
     }
 }
