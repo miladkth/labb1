@@ -47,7 +47,7 @@ class DbManager {
         if(db.connections.size() > 0){
             return db.connections.remove(0);
         }
-
+        System.out.println("no connection");
         return db.connections.remove(0);
     }
     protected static void releaseConnection(Connection con){

@@ -4,6 +4,8 @@ import bo.entities.Product;
 import db.DbContext;
 import db.exceptions.DbException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class ProductService{
@@ -32,5 +34,12 @@ public class ProductService{
             db.release();
         }
         return items;
+    }
+    public static ArrayList<String> categoriesFromString(String categoryString){
+            String[] result = categoryString.split(",");
+            ArrayList<String> list = new ArrayList<>(Arrays.asList(result));
+            ArrayList<String> slist = new ArrayList<>();
+            list.forEach(l -> slist.add(l.trim()));
+            return slist;
     }
 }

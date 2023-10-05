@@ -36,6 +36,21 @@ public class UserDB {
         }
     }
 
+    public User getUserByEmail(String email) throws DbException {
+        try {
+            PreparedStatement st = this.conn.prepareStatement("SELECT * from t_users WHERE email = ?");
+            st.setString(1, email);
+            ResultSet rs = st.executeQuery();
+            Collection<User> user = mapResultSet(rs);
+            if (user.size() == 0){
+                return null;
+            }
+            return user.iterator().next();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
+
     public int insertSingle(User user) throws DbException {
         try {
             PreparedStatement pstm = this.conn.prepareStatement("insert into t_users (id,username, email, password, role) values (?,?,?,?,?)");

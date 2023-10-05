@@ -25,6 +25,14 @@ public class User {
         this.email = email;
     }
 
+    public User(String userName, String password, String email) {
+        this.userName = userName;
+        this.id = UUID.randomUUID().toString();
+        this.password = password;
+        this.role = "customer";
+        this.email = email;
+    }
+
     public String getUserName() {
         return userName;
     }
