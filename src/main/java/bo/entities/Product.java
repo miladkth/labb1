@@ -1,5 +1,6 @@
 package bo.entities;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Product {
@@ -9,6 +10,8 @@ public class Product {
     private int quantity;
     private float price;
     private String imgUrl;
+    private ArrayList<String> categories;
+
     public Product() {
         this.id = "";
         this.description = "";
@@ -24,14 +27,25 @@ public class Product {
         this.quantity = quantity;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categories = new ArrayList<>();
     }
-    public Product(String title, String description, int quantity, float price, String imgUrl) {
+    public Product(String id, String title, String description, int quantity, float price, String imgUrl, ArrayList<String> categories) {
+        this.id = id;
+        this.description = description;
+        this.title = title;
+        this.quantity = quantity;
+        this.price = price;
+        this.imgUrl = imgUrl;
+        this.categories = categories;
+    }
+    public Product(String title, String description, int quantity, float price, String imgUrl, ArrayList<String> categories) {
         this.id = UUID.randomUUID().toString();
         this.description = description;
         this.title = title;
         this.quantity = quantity;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categories = categories;
     }
 
     public String getId() {
@@ -80,6 +94,19 @@ public class Product {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+    public void addCategory(String category){
+        if(this.categories == null)
+            this.categories = new ArrayList<>();
+        this.categories.add(category);
+    }
+
+    public void setCategories(ArrayList<String> categories) {
+        this.categories = categories;
+    }
+
+    public ArrayList<String> getCategories() {
+        return categories;
     }
 
     @Override

@@ -15,6 +15,11 @@
 <ul>
 <c:forEach items="${items}" var="item">
     <li>${item.id}, ${item.title}, ${item.price}</li>
+    <p>
+    <c:forEach items="${item.categories}" var="cat">
+        ${cat},
+    </c:forEach>
+    </p>
 </c:forEach>
 </ul>
 </body>

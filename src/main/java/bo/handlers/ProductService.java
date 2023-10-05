@@ -8,7 +8,8 @@ import java.util.Collection;
 
 public class ProductService{
     public static void addItem (Product newItem) throws DbException {
-
+        DbHandler db = new DbHandler();
+        db.productDb.insertSingle(newItem);
     }
     public static Collection<Product> getItems () throws DbException{
         DbHandler db = new DbHandler();

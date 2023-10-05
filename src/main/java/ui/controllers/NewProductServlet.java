@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 
-@WebServlet(name = "TestServlet", value = "/new-product-upload")
+@WebServlet(name = "NewProductUpload", value = "/new-product-upload")
 @MultipartConfig(
         fileSizeThreshold = 1024*1024,
         maxFileSize = 1024*1024*10,
