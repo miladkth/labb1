@@ -1,5 +1,6 @@
 package db;
 
+import db.exceptions.DbException;
 import db.exceptions.NoConnectionException;
 
 import java.sql.DriverManager;
@@ -42,13 +43,12 @@ class DbManager {
         }
         return instance;
     }
-    protected static Connection getConnection() throws SQLException {
+    protected static Connection getConnection() throws SQLException, DbException {
         DbManager db = getInstance();
         if(db.connections.size() > 0){
             return db.connections.remove(0);
         }
-        System.out.println("no connection");
-        return db.connections.remove(0);
+        throw new DbException("Connection pool empty");
     }
     protected static void releaseConnection(Connection con){
         getInstance().connections.add(con);

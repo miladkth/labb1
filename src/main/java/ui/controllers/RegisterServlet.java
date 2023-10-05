@@ -2,10 +2,8 @@ package ui.controllers;
 
 
 import bo.entities.User;
-import bo.handlers.FileUploadService;
 import bo.handlers.UserService;
 import db.exceptions.DbException;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
 
 @WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {

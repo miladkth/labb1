@@ -62,5 +62,6 @@ public class DbContext{
     }
     public void release(){
         DbManager.releaseConnection(this.con);
+        this.con = null;
     }
 }

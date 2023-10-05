@@ -7,11 +7,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.UUID;
 
 public class FileUploadService {

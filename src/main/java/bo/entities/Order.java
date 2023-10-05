@@ -1,6 +1,7 @@
 package bo.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Order {
@@ -9,7 +10,17 @@ public class Order {
     private boolean fullFilled;
     private String shippingAddress;
     private LocalDate createdAtDate;
+    private ArrayList<Product> products;
 
+    public ArrayList<Product> getProducts() {
+        return this.products;
+    }
+    public void addProducts(ArrayList<Product> products){
+        this.products.addAll(products);
+    }
+    public void addProduct(Product product){
+        this.products.add(product);
+    }
 
     public Order(String id, String userId, boolean fullFilled, String shippingAddress) {
         this.id = id;
@@ -17,6 +28,7 @@ public class Order {
         this.fullFilled = fullFilled;
         this.shippingAddress = shippingAddress;
     }
+
 
     public Order(String userId, String shippingAddress) {
         this.id = UUID.randomUUID().toString();

@@ -1,17 +1,10 @@
 package ui.controllers;
 
-/*import java.io.*;*/
-
-import bo.entities.Order;
 import bo.entities.Product;
 import bo.entities.User;
-import bo.handlers.OrderService;
 import bo.handlers.ProductService;
 import bo.handlers.UserService;
-import db.DbContext;
-import db.OrderDB;
 import db.exceptions.DbException;
-
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
