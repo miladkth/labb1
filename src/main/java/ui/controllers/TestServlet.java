@@ -2,11 +2,14 @@ package ui.controllers;
 
 /*import java.io.*;*/
 
+import bo.entities.Order;
 import bo.entities.Product;
 import bo.entities.User;
+import bo.handlers.OrderService;
 import bo.handlers.ProductService;
 import bo.handlers.UserService;
 import db.DbContext;
+import db.OrderDB;
 import db.exceptions.DbException;
 
 import javax.servlet.*;
@@ -31,7 +34,19 @@ public class TestServlet extends HttpServlet {
         Collection<Product> items = null;
         try {
             items = ProductService.getItems();
-            UserService.getUserInfo("c21f765f-236b-425e-9267-271e67fdd96e");
+            User user = UserService.getUserInfo("c21f765f-236b-425e-9267-271e67fdd96e");
+            System.out.println("Get user ---------------");
+
+            OrderService.createOrder(new Order(user.getId(), "hälsovägen 1"));
+            System.out.println("Created order--------------");
+
+            Collection orders = OrderService.getAllOrders();
+            System.out.println("Get order ------------------");
+
+            orders.forEach(order -> {
+                System.out.println(order.toString());
+            });
+
             System.out.println("done creating user");
         } catch (DbException e) {
             throw new RuntimeException(e);

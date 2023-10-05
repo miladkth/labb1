@@ -18,7 +18,7 @@ class DbManager {
         try{
             connections = new ArrayList<>();
 
-            int count = 1;
+            int count = 5;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             for (int i = 0; i < count; i++) {
                 Connection con = DriverManager.getConnection(this.dbUrl, this.username, this.password);
