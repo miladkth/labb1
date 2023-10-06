@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="flex justify-end border-t-2 pt-2">
+    <div class="flex justify-end pt-2">
       <button class="rounded-full bg-black px-8 py-2 text-white">Checkout</button>
     </div>
   </div>
