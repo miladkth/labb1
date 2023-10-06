@@ -23,6 +23,7 @@
 
 <div class="mt-22 pt-40">
   <c:forEach items="${products}" var="product">
+    <p>---------------------------------</p>
     <p>Id: ${product.id}</p>
     <p>Title: ${product.title}</p>
     <p>description: ${product.description}</p>
@@ -35,6 +36,7 @@
       ${category},
 
     </c:forEach>
+      <a href="cart/addToCart/${product.id}">Add to cart</a>
     </p>
   </c:forEach>
 

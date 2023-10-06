@@ -13,6 +13,24 @@ public class ProductDB{
     protected ProductDB(Connection conn){
         this.conn = conn;
     }
+
+    public Product getById(String id) throws DbException {
+        try{
+            Statement st = this.conn.createStatement();
+            PreparedStatement pstm = this.conn.prepareStatement("select * from t_products as p join t_caterogies on p.id = t_caterogies.product_id and p.id = ? order by t_caterogies.product_id");
+            pstm.setString(1, id);
+            ResultSet rs = pstm.executeQuery();
+            Collection<Product> products = mapResultSet(rs);
+            System.out.println(products.size());
+            if (products.size()>0) {
+                return products.iterator().next();
+            }
+            return null;
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+
     public Collection<Product> getAll() throws DbException{
         try{
             Statement st = this.conn.createStatement();

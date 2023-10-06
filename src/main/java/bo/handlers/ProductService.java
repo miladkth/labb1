@@ -43,4 +43,18 @@ public class ProductService{
             list.forEach(l -> slist.add(l.trim()));
             return slist;
     }
+
+    public static Product getById(String id) throws DbException {
+        DbHandler db = null;
+        try{
+            db = new DbHandler();
+            return db.productDb.getById(id);
+        }catch (DbException e){
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if(db != null)
+                db.release();
+        }
+    }
 }
