@@ -5,6 +5,7 @@ import bo.entities.Product;
 import db.exceptions.DbException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
@@ -19,28 +20,47 @@ public class OrderDB {
     public Collection<Order> getAll() throws DbException {
         try {
             Statement st = this.conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * from t_orders");
+            ResultSet rs = st.executeQuery("select * from t_orders as o join t_order_product on t_order_product.order_id = o.id join t_products on t_products.id = t_order_product.product_id order by o.id");
             return mapResultSet(rs);
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         }
     }
-
     private static Collection mapResultSet(ResultSet rs) throws SQLException {
         Vector<Order> v = new Vector<>();
-        while (rs.next()) {
-            String id = rs.getString("id");
-            String userId = rs.getString("user_id");
-            boolean fullFilled = rs.getBoolean("fullfilled");
-            String shippingAddress = rs.getString("shippingAddress");
+        String id = "";
 
-            Order item = new Order(id, userId, fullFilled, shippingAddress);
-            v.add(item);
+        Order o = null;
+
+        while (rs.next()) {
+            String idtemp = rs.getString("order_id");
+            if(!id.equals(idtemp)){
+                if(o!=null)
+                    v.add(o);
+                o = new Order();
+            }
+
+            id = idtemp;
+            o.setId(rs.getString("order_id"));
+            o.setUserId(rs.getString("user_id"));
+            o.setFullFilled(rs.getBoolean("fullfilled"));
+            o.setShippingAddress(rs.getString("shippingAddress"));
+
+            String product_id = rs.getString("product_id");
+            int qty = rs.getInt(8);
+            String title = rs.getString("title");
+            String descr = rs.getString("description");
+            float price = rs.getFloat("price");
+            String img = rs.getString("imageUrl");
+
+            Product p = new Product(product_id, title, descr, qty, price, img);
+            o.addProduct(p);
         }
+        v.add(o);
         return v;
     }
 
-    public int[] insertSingle(Order order, List<Product> products) throws DbException {
+    public int[] insertSingle(Order order) throws DbException {
         Boolean t = true;
         try {
             t = this.conn.getAutoCommit();
@@ -58,6 +78,7 @@ public class OrderDB {
 
 
             PreparedStatement pstm1 = this.conn.prepareStatement("insert into t_order_product (order_id, product_id, quantity) values (?,?,?)");
+            ArrayList<Product> products  = order.getProducts();
             for (Product p : products) {
                 pstm1.setString(1,order.getId());
                 pstm1.setString(2,p.getId());

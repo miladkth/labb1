@@ -27,6 +27,7 @@ public class Order {
         this.userId = userId;
         this.fullFilled = fullFilled;
         this.shippingAddress = shippingAddress;
+        this.products = new ArrayList<>();
     }
 
 
@@ -35,6 +36,15 @@ public class Order {
         this.userId = userId;
         this.fullFilled = false;
         this.shippingAddress = shippingAddress;
+        this.products = new ArrayList<>();
+    }
+
+    public Order(){
+        this.id = "default id";
+        this.userId = "default user id";
+        this.fullFilled = false;
+        this.shippingAddress = "dafault shipping address";
+        this.products = new ArrayList<>();
     }
 
 

@@ -8,11 +8,11 @@ import java.util.List;
 
 public class OrderService {
 
-    public static void createOrder(Order order, List<Product> products) throws DbException {
+    public static void createOrder(Order order) throws DbException {
         DbHandler db = null;
         try {
             db = new DbHandler();
-            int[] a = db.orderDB.insertSingle(order, products);
+            int[] a = db.orderDB.insertSingle(order);
         } catch (DbException e) {
             e.printStackTrace();
             throw e;
