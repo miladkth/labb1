@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: taquang
@@ -20,7 +21,23 @@
   </a>
 </div>
 
-<div>
+<div class="mt-22 pt-40">
+  <c:forEach items="${products}" var="product">
+    <p>Id: ${product.id}</p>
+    <p>Title: ${product.title}</p>
+    <p>description: ${product.description}</p>
+    <p>price: ${product.price}</p>
+    <p>quantity: ${product.quantity}</p>
+    <p>imgUrl: ${product.imgUrl}</p>
+    <p>Categories:
+    <c:forEach items="${product.categories}" var="category">
+
+      ${category},
+
+    </c:forEach>
+    </p>
+  </c:forEach>
+
 
 </div>
 

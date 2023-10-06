@@ -21,7 +21,7 @@ public class ProductService{
         }
 
     }
-    public static Collection<Product> getItems () throws DbException{
+    public static Collection<Product> getAll() throws DbException{
         DbHandler db = null;
         Collection<Product> items;
         try{
