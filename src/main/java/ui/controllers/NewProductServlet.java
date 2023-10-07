@@ -31,7 +31,7 @@ public class NewProductServlet extends HttpServlet {
 
         if (getTitle==null || getDesc==null || getPrice==null || getQty==null || getCategories==null) {
             req.setAttribute("error", "All field is required");
-            req.getRequestDispatcher("login.jsp").forward(req,res);
+            req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
             return;
         }
 
@@ -41,7 +41,7 @@ public class NewProductServlet extends HttpServlet {
             getQuantity = Integer.parseInt(getQty);
         } catch (NumberFormatException e) {
             req.setAttribute("error", "Invalid quantity");
-            req.getRequestDispatcher("login.jsp").forward(req,res);
+            req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
             return;
         }
 
@@ -50,31 +50,31 @@ public class NewProductServlet extends HttpServlet {
             getPrice1 = Float.parseFloat(getPrice);
         } catch (NumberFormatException e) {
             req.setAttribute("error", "Invalid price");
-            req.getRequestDispatcher("login.jsp").forward(req,res);
+            req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
             return;
         }
 
+        Part part = req.getPart("image");
+        String filename = getFilenameFromPart(part);
+        String accessUri = FileUploadService.Upload(filename, part.getInputStream());
+
         ArrayList<String> list = ProductService.categoriesFromString(getCategories);
-        Product product = new Product(getTitle,getDesc,getQuantity,getPrice1,"ewe",list);
+        Product product = new Product(getTitle,getDesc,getQuantity,getPrice1,accessUri,list);
 
         try {
             ProductService.addItem(product);
         } catch (DbException e) {
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("newProduct.jsp").forward(req,res);
+            req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
             return;
         }
 
-
-        //Part part = req.getPart("image");
-        //String filename = getFilenameFromPart(part);
-        //String accessUri = FileUploadService.Upload(filename, part.getInputStream());
-
-        //res.getWriter().println(accessUri);
+        req.setAttribute("info", "Uploaded successfully!");
+        req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.getRequestDispatcher("newProduct.jsp").forward(req,res);
+        req.getServletContext().getRequestDispatcher("/newProduct.jsp").forward(req,res);
     }
 
     private String getFilenameFromPart(Part part){

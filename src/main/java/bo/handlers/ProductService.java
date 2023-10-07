@@ -19,7 +19,68 @@ public class ProductService{
             if(db!=null)
                 db.release();
         }
+    }
+    public static void removeCategory(String id, String category) throws DbException {
+        DbHandler db = null;
+        try {
+            db = new DbHandler();
+            db.productDb.removeCategory(id, category);
+        }catch (DbException e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            if(db!=null)
+                db.release();
+        }
+    }
+    public static void toggleCategory(String id, String category) throws DbException{
+        DbHandler db = null;
+        try {
+            db = new DbHandler();
+            Product p = db.productDb.getById(id);
+            if(p == null)
+                return;
 
+            for(String cat:p.getCategories()){
+                if(cat.equals(category)){
+                    db.productDb.removeCategory(id, category);
+                    return;
+                }
+            }
+            db.productDb.addCategory(id, category);
+        }catch (DbException e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            if(db!=null)
+                db.release();
+        }
+    }
+    public static void addCategory(String id, String category) throws DbException {
+        DbHandler db = null;
+        try {
+            db = new DbHandler();
+            db.productDb.addCategory(id, category);
+        }catch (DbException e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            if(db!=null)
+                db.release();
+        }
+    }
+    public static void updateField(String id, String newDescription, String fieldname) throws DbException {
+        DbHandler db = null;
+        try {
+            db = new DbHandler();
+            db.productDb.updateOneField(id, newDescription, fieldname);
+        }catch (DbException e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            if(db!=null)
+                db.release();
+        }
     }
     public static Collection<Product> getAll() throws DbException{
         DbHandler db = null;

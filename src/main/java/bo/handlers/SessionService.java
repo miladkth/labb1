@@ -25,6 +25,7 @@ public class SessionService {
         if (cart==null) {
             cart = new ArrayList<>();
         }
+        System.out.println("in add to cart");
 
         for (Product p : cart) {
             if (p.getId().equals(product.getId())) {

@@ -34,10 +34,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             User user = UserService.createUserWithEmailAndPassword(getName,getEmail,getPassword);
-
-            req.getSession().setAttribute("user", user);
-
-            req.getRequestDispatcher("upload.jsp").forward(req,res);
+            req.getRequestDispatcher("login.jsp").forward(req,res);
         } catch (DbException e) {
             e.printStackTrace();
         }

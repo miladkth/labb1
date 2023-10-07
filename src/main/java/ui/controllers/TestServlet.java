@@ -30,27 +30,15 @@ public class TestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         System.out.println("hej");
-        Collection<Order> items = null;
         try {
-            items = OrderService.getAllOrders();
+            ProductService.removeCategory("497b5dea-7386-4289-a74f-a9b44d240bfc", "22");
+            ProductService.addCategory("497b5dea-7386-4289-a74f-a9b44d240bfc", "new cat");
 
-            items.forEach(i -> {
-                System.out.println("------");
-                System.out.println(i.getId());
-                i.getProducts().forEach(p -> {
-                    System.out.println(p.getTitle());
-                });
-            });
-            System.out.println(items.size());
+            System.out.println("done");
         } catch (DbException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
-
-
-
-        //request.setAttribute("items", items);
-        //request.getRequestDispatcher("/items.jsp").forward(request, response);
     }
 
     @Override

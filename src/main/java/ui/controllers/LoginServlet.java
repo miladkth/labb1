@@ -26,7 +26,8 @@ public class LoginServlet extends HttpServlet {
         User user = sessionService.getUser();
         System.out.println(user);
         if (user!=null) {
-            req.getRequestDispatcher("upload.jsp").forward(req,res);
+            res.sendRedirect("products");
+            return;
         }
         req.getRequestDispatcher("login.jsp").forward(req,res);
     }
@@ -47,7 +48,7 @@ public class LoginServlet extends HttpServlet {
             SessionService sessionService = new SessionService(req.getSession());
             sessionService.saveUser(user);
 
-            req.getRequestDispatcher("upload.jsp").forward(req,res);
+            res.sendRedirect("products");
         } catch (DbException e) {
             e.printStackTrace();
         }

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "CartServlet", value = "/cart/addToCart/*")
+@WebServlet(name = "CartServlet", value = {"/cart/addToCart/*", "/cart/remove/*"})
 public class CartServlet extends HttpServlet {
     public void init() {}
     @Override
@@ -25,35 +25,27 @@ public class CartServlet extends HttpServlet {
         String pathInfo = req.getPathInfo();
         String id = pathInfo.substring(1);
 
-        try {
-            Product p = ProductService.getById(id);
+        String l = req.getRequestURI();
+        System.out.println(l);
 
-            if(p == null){
-                System.out.println("product is null");
+        try {
+            SessionService sessionService = new SessionService(req.getSession());
+            if(l.startsWith("/cart/remove/")){
+                sessionService.removeFromCart(id);
+                res.sendRedirect("/products");
                 return;
             }
 
-            SessionService sessionService = new SessionService(req.getSession());
-
-
+            Product p = ProductService.getById(id);
+            if(p == null){
+                return;
+            }
             sessionService.addToCart(p);
-
-
-            List<Product> cart = sessionService.getCart();
-            System.out.println("----------------------------");
-            cart.forEach(c -> {
-                System.out.println(c);
-            });
-
-
-            System.out.println("test");
-
+            res.sendRedirect("/products");
         } catch (DbException e) {
             e.printStackTrace();
             throw new ServletException(e.getMessage());
         }
-
-        System.out.println(pathInfo);
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

@@ -30,7 +30,68 @@ public class ProductDB{
             throw new DbException(e.getMessage());
         }
     }
+    public void removeCategory(String id, String category){
+        try{
+            PreparedStatement pstm1 = this.conn.prepareStatement("delete from t_caterogies where product_id = ? and category = ?");
+            pstm1.setString(1, id);
+            pstm1.setString(2, category);
+            pstm1.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addCategory(String id, String category){
+        try{
+            PreparedStatement pstm1 = this.conn.prepareStatement("insert into t_caterogies (product_id, category) value (?,?)");
+            pstm1.setString(1, id);
+            pstm1.setString(2, category);
+            pstm1.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public void updateOneField(String id, String newVal, String fieldName) throws DbException {
+        String sql = null;
+        switch (fieldName){
+            case "title":
+                sql = "update t_products set title = ? where id = ?";
+                break;
+            case "description":
+                sql = "update t_products set description = ? where id = ?";
+                break;
+            case "price":
+                sql = "update t_products set price = ? where id = ?";
+                break;
+            case "quantity":
+                sql = "update t_products set quantity = ? where id = ?";
+                break;
+            case "imageUrl":
+                sql = "update t_products set imageUrl = ? where id = ?";
+                break;
+            default:
+                throw new DbException("No field name " + fieldName);
+        }
+
+        try{
+            PreparedStatement pstm = this.conn.prepareStatement(sql);
+
+            if(fieldName.equals("price")){
+                float val = Float.parseFloat(newVal);
+                pstm.setFloat(1, val);
+            }else if(fieldName.equals("quantity")){
+                int val = Integer.parseInt(newVal);
+                pstm.setInt(1, val);
+            }else{
+                pstm.setString(1, newVal);
+            }
+
+            pstm.setString(2, id);
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public Collection<Product> getAll() throws DbException{
         try{
             Statement st = this.conn.createStatement();
