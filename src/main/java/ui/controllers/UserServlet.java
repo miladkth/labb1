@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 @WebServlet(name = "LoginServlet", value = "/login")
-public class LoginServlet extends HttpServlet {
+public class UserServlet extends HttpServlet {
     public void init() {}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
