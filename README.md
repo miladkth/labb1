@@ -1,2 +1,2 @@
-![Diagram](Diagram.jpg)
+![Diagram](Diagram2.jpg)
 

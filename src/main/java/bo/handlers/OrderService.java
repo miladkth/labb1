@@ -2,6 +2,7 @@ package bo.handlers;
 
 import bo.entities.Order;
 import bo.entities.Product;
+import db.UserDB;
 import db.exceptions.DbException;
 import ui.DTOs.OrderDTO;
 import ui.DTOs.ProductDTO;
