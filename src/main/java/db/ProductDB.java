@@ -4,9 +4,7 @@ import bo.entities.Product;
 import db.exceptions.DbException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Vector;
+import java.util.*;
 
 public class ProductDB{
     private Connection conn;
@@ -16,11 +14,10 @@ public class ProductDB{
 
     public Product getById(String id) throws DbException {
         try{
-            Statement st = this.conn.createStatement();
             PreparedStatement pstm = this.conn.prepareStatement("select * from t_products as p join t_caterogies on p.id = t_caterogies.product_id and p.id = ? order by t_caterogies.product_id");
             pstm.setString(1, id);
             ResultSet rs = pstm.executeQuery();
-            Collection<Product> products = mapResultSet(rs);
+            Collection<Product> products = mapResultSet(rs, true);
             System.out.println(products.size());
             if (products.size()>0) {
                 return products.iterator().next();
@@ -51,6 +48,17 @@ public class ProductDB{
         }
     }
 
+    public void updateIsShown(String id, boolean newVal) throws DbException {
+        try{
+            PreparedStatement pstm = this.conn.prepareStatement("update t_products set isShown = ? where id = ?");
+            pstm.setBoolean(1, newVal);
+            pstm.setString(2, id);
+
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void updateOneField(String id, String newVal, String fieldName) throws DbException {
         String sql = null;
         switch (fieldName){
@@ -96,15 +104,75 @@ public class ProductDB{
         try{
             Statement st = this.conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * from t_products as p join t_caterogies on p.id = t_caterogies.product_id");
-            return mapResultSet(rs);
+            return mapResultSet(rs, true);
         } catch (SQLException e){
             throw new DbException(e.getMessage());
+        }
+    }
+    public Collection<Product> getAllListed() throws DbException{
+        try{
+            Statement st = this.conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * from t_products as p join t_caterogies on p.id = t_caterogies.product_id && isShown=true");
+            return mapResultSet(rs, true);
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+    public Collection<Product> getByCategory(String category) throws DbException {
+        try{
+            PreparedStatement st = this.conn.prepareStatement("select * from t_products as p join t_caterogies on p.id = t_caterogies.product_id and t_caterogies.category= ?;");
+            st.setString(1, category);
+            ResultSet rs = st.executeQuery();
+            return mapResultSet(rs, true);
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+    public Collection<Product> getListedByCategory(String category) throws DbException {
+        try{
+            PreparedStatement st = this.conn.prepareStatement("select * from t_products as p join t_caterogies on p.id = t_caterogies.product_id and t_caterogies.category= ? and p.isShown = true;");
+            st.setString(1, category);
+            ResultSet rs = st.executeQuery();
+            return mapResultSet(rs, true);
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+    public Collection<String> getAllCategories() throws DbException {
+        try{
+            Statement st = this.conn.createStatement();
+            ResultSet rs = st.executeQuery("select category from t_caterogies group by category;");
+            ArrayList<String> categories = new ArrayList<>();
+            while (rs.next()){
+                categories.add(rs.getString(1));
+            }
+            return categories;
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+    public Collection<Product> getManyById(List<String> ids) throws DbException{
+        String inSql = String.join(",", Collections.nCopies(ids.size(), "?"));
+        String queryStr = String.format("SELECT * FROM t_products WHERE id IN (%s)", inSql);
+
+        System.out.println(inSql);
+        System.out.println(queryStr);
+        try{
+            PreparedStatement pstm = this.conn.prepareStatement(queryStr);
+            for (int i = 0; i < ids.size(); i++) {
+                pstm.setString(i+1, ids.get(i));
+            }
+            ResultSet rs = pstm.executeQuery();
+            return mapResultSet(rs,false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     public int[] insertSingle(Product product) throws DbException {
         boolean t = true;
 
         try {
+            t = this.conn.getAutoCommit();
             if(t && product.getCategories().size()>0) {
                 this.conn.setAutoCommit(false);
             }
@@ -133,7 +201,7 @@ public class ProductDB{
         }catch (SQLException e){
             e.printStackTrace();
             try {
-                if (!t  && product.getCategories().size()>0) {
+                if (t  && product.getCategories().size()>0) {
                     this.conn.rollback();
                 }
             } catch (SQLException ex) {
@@ -143,7 +211,7 @@ public class ProductDB{
                 throw new DbException(e.getMessage());
         }
     }
-    private static Collection<Product> mapResultSet( ResultSet rs ) throws SQLException {
+    private static Collection<Product> mapResultSet( ResultSet rs , boolean readCategory) throws SQLException {
         Vector<Product> v = new Vector<>();
         String id = "";
 
@@ -163,7 +231,10 @@ public class ProductDB{
             p.setQuantity(rs.getInt("quantity"));
             p.setPrice(rs.getFloat("price"));
             p.setImgUrl(rs.getString("imageUrl"));
-            p.addCategory(rs.getString("category"));
+            p.setIsShown(rs.getBoolean("isShown"));
+            if(readCategory){
+                p.addCategory(rs.getString("category"));
+            }
         }
         v.add(p);
         return v;

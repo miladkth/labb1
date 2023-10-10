@@ -7,7 +7,6 @@ import db.exceptions.DbException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Vector;
 
 public class OrderDB {
@@ -52,20 +51,49 @@ public class OrderDB {
             String descr = rs.getString("description");
             float price = rs.getFloat("price");
             String img = rs.getString("imageUrl");
+            boolean isShown = rs.getBoolean("isShown");
 
-            Product p = new Product(product_id, title, descr, qty, price, img);
+            Product p = new Product(product_id, title, descr, qty, price, img, isShown);
             o.addProduct(p);
         }
         v.add(o);
         return v;
     }
 
+    public boolean getFulfillByID(String id) throws DbException {
+        try{
+            PreparedStatement pstm = this.conn.prepareStatement("select fullfilled from t_orders where id = ?");
+            pstm.setString(1, id);
+            ResultSet rs = pstm.executeQuery();
+
+            if(rs.next())
+                return rs.getBoolean(1);
+
+            throw new DbException("Product with id " + id + " not found");
+
+        } catch (Exception e) {
+            throw new DbException(e.getMessage());
+        }
+
+    }
+
+    public void setFulfillByID(String id, boolean value) throws DbException {
+        try{
+            PreparedStatement pstm = this.conn.prepareStatement("update t_orders set fullfilled = ? where id = ?;");
+            pstm.setBoolean(1, value);
+            pstm.setString(2, id);
+            pstm.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException(e.getMessage());
+        }
+
+    }
+
     public int[] insertSingle(Order order) throws DbException {
         Boolean t = true;
         try {
             t = this.conn.getAutoCommit();
-
-            if(t){
+            if(t && order.getProducts().size()>0){
                 this.conn.setAutoCommit(false);
             }
 
@@ -95,11 +123,10 @@ public class OrderDB {
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                if(!t){
+                if(t){
                     this.conn.rollback();
                 }
             }catch (SQLException ex){
-                ex.printStackTrace();
                 throw new DbException(e.getMessage() + ", " + ex.getMessage());
             }
             throw new DbException(e.getMessage());

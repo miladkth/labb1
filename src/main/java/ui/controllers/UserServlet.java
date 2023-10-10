@@ -1,12 +1,10 @@
 package ui.controllers;
 
 
-import bo.entities.User;
-import bo.handlers.FileUploadService;
 import bo.handlers.SessionService;
 import bo.handlers.UserService;
 import db.exceptions.DbException;
-import io.github.cdimascio.dotenv.Dotenv;
+import ui.DTOs.UserDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,43 +12,58 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+@WebServlet(name = "UserServlet", value = {"/user/login", "/user/logout"})
 public class UserServlet extends HttpServlet {
     public void init() {}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         SessionService sessionService = new SessionService(req.getSession());
-        User user = sessionService.getUser();
-        System.out.println(user);
-        if (user!=null) {
-            res.sendRedirect("products");
+        UserDTO user = sessionService.getUser();
+
+        //logout user
+        if(req.getRequestURI().equals("/user/logout")){
+            sessionService.removeUser();
+            req.getServletContext().getRequestDispatcher("/login.jsp").forward(req,res);
             return;
         }
-        req.getRequestDispatcher("login.jsp").forward(req,res);
+
+        // user already loged in
+        if (user!=null) {
+            res.sendRedirect("/products");
+            return;
+        }
+        req.getServletContext().getRequestDispatcher("/login.jsp").forward(req,res);
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String getEmail = req.getParameter("email");
         String getPassword = req.getParameter("password");
 
+        if (getEmail==null || getPassword==null
+                || getEmail.equals("") || getPassword.equals("")) {
+            req.setAttribute("error", "All field is required");
+            req.getServletContext().getRequestDispatcher("/login.jsp").forward(req,res);
+            return;
+        }
+
         try {
-            User user = UserService.logInUserWithEmailAndPassword(getEmail,getPassword);
+            UserDTO user = UserService.logInUserWithEmailAndPassword(getEmail,getPassword);
 
             if (user==null) {
                 req.setAttribute("error", "Try again");
-                req.getRequestDispatcher("login.jsp").forward(req,res);
+                req.getServletContext().getRequestDispatcher("/login.jsp").forward(req,res);
                 return;
             }
 
             SessionService sessionService = new SessionService(req.getSession());
             sessionService.saveUser(user);
 
-            res.sendRedirect("products");
+            res.sendRedirect("/products");
         } catch (DbException e) {
-            e.printStackTrace();
+            req.setAttribute("code", 500);
+            req.setAttribute("message", e.getMessage());
+            req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
         }
     }
 }

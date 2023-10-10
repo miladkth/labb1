@@ -2,9 +2,13 @@ package bo.handlers;
 
 import bo.entities.Product;
 import bo.entities.User;
+import ui.DTOs.ProductDTO;
+import ui.DTOs.UserDTO;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SessionService {
     private HttpSession session;
@@ -12,22 +16,24 @@ public class SessionService {
         this.session = session;
     }
 
-    public void saveUser(User user) {
+    public void saveUser(UserDTO user) {
         this.session.setAttribute("user",user);
     }
 
-    public User getUser() {
-        return (User) this.session.getAttribute("user");
+    public UserDTO getUser() {
+        return (UserDTO) this.session.getAttribute("user");
+    }
+    public void removeUser() {
+        this.session.setAttribute("user", null);
     }
 
-    public void addToCart(Product product) {
-        List<Product> cart = (List<Product>) this.session.getAttribute("cart");
+    public void addToCart(ProductDTO product) {
+        List<ProductDTO> cart = (List<ProductDTO>) this.session.getAttribute("cart");
         if (cart==null) {
             cart = new ArrayList<>();
         }
-        System.out.println("in add to cart");
 
-        for (Product p : cart) {
+        for (ProductDTO p : cart) {
             if (p.getId().equals(product.getId())) {
                 int qty = p.getQuantity();
                 p.setQuantity(qty+1);
@@ -39,25 +45,26 @@ public class SessionService {
         session.setAttribute("cart",cart);
     }
 
-    public boolean removeFromCart(String productId) {
-        List<Product> cart = (List<Product>) this.session.getAttribute("cart");
-        for(Product p : cart) {
+    public void removeFromCart(String productId) {
+        List<ProductDTO> cart = (List<ProductDTO>) this.session.getAttribute("cart");
+        for(ProductDTO p : cart) {
             if (p.getId().equals(productId)) {
-
                 if (p.getQuantity()==1) {
                     cart.remove(p);
-                    return true;
                 }else {
                     int qty = p.getQuantity();
                     p.setQuantity(qty-1);
-                    return true;
                 }
+                return;
             }
         }
-        return false;
     }
 
-    public List<Product> getCart() {
-        return (List<Product>) this.session.getAttribute("cart");
+    public List<ProductDTO> getCart() {
+        List<ProductDTO> pList = (List<ProductDTO>) this.session.getAttribute("cart");
+        return pList;
+    }
+    public void clearCart(){
+        this.session.setAttribute("cart", null);
     }
 }

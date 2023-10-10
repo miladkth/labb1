@@ -2,13 +2,10 @@ package ui.controllers;
 
 
 import bo.entities.Product;
-import bo.entities.User;
-import bo.handlers.FileUploadService;
 import bo.handlers.ProductService;
 import bo.handlers.SessionService;
-import bo.handlers.UserService;
 import db.exceptions.DbException;
-import io.github.cdimascio.dotenv.Dotenv;
+import ui.DTOs.ProductDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,10 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
 
-@WebServlet(name = "EditProductServlet", value = "/admin/editProduct/*")
+@WebServlet(name = "EditProductServlet", value = "/warehouse/editProduct/*")
 public class EditProduct extends HttpServlet {
     public void init() {}
     @Override
@@ -29,23 +24,26 @@ public class EditProduct extends HttpServlet {
         System.out.println(id);
 
         try {
-            Product product = ProductService.getById(id);
-            if(product == null)
-                throw new ServletException("Product not found");
+            ProductDTO product = ProductService.getById(id);
+            if(product == null){
+                req.setAttribute("code", 404);
+                req.setAttribute("message", "product with id "+ id + " not found!");
+                req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
+                return;
+            }
 
             req.setAttribute("product", product);
+            SessionService session = new SessionService(req.getSession());
+            req.setAttribute("user", session.getUser());
             req.getServletContext().getRequestDispatcher("/editProduct.jsp").forward(req,res);
         } catch (DbException e) {
-            throw new RuntimeException(e);
+            req.setAttribute("code", 500);
+            req.setAttribute("message", e.getMessage());
+            req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
         }
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        System.out.println(req.getParameter("field"));
-        System.out.println(req.getParameter("newValue"));
-
-
-
         String pathInfo = req.getPathInfo();
         String id = pathInfo.substring(1);
         req.getParameter("newValue");
@@ -54,21 +52,27 @@ public class EditProduct extends HttpServlet {
             ProductService.getById(id);
             String fieldName = req.getParameter("field");
             if(fieldName.equals("categories")){
-                System.out.println("in cat");
                 ProductService.toggleCategory(id, newVal);
-            }else{
+            }else if(fieldName.equals("isShown")){
+                ProductService.setIsShown(id, newVal.equals("true"));
+            }
+            else{
                 ProductService.updateField(id, newVal, fieldName);
             }
 
-            Product product = ProductService.getById(id);
-            if(product == null)
-                throw new ServletException("Product not found");
+            ProductDTO product = ProductService.getById(id);
+            if(product == null){
+                req.setAttribute("code", 404);
+                req.setAttribute("message", "product with id "+ id + " not found!");
+                req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
+            }
 
             req.setAttribute("product", product);
             req.getServletContext().getRequestDispatcher("/editProduct.jsp").forward(req,res);
         } catch (DbException e) {
-            throw new RuntimeException(e);
+            req.setAttribute("code", 404);
+            req.setAttribute("message", e.getMessage());
+            req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
         }
-
     }
 }

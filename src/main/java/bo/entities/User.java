@@ -8,13 +8,15 @@ public class User {
     private String password;
     private String role;
     private String email;
+    private boolean isActive;
 
-    public User(String id ,String userName, String password, String role, String email) {
+    public User(String id ,String userName, String password, String role, String email, boolean isActive) {
         this.userName = userName;
         this.id = id;
         this.password = password;
         this.role = role;
         this.email = email;
+        this.isActive = isActive;
     }
 
     public User(String userName, String password, String role, String email) {
@@ -23,6 +25,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.email = email;
+        this.isActive = true;
     }
 
     public User(String userName, String password, String email) {
@@ -31,6 +34,14 @@ public class User {
         this.password = password;
         this.role = "customer";
         this.email = email;
+        this.isActive = true;
+    }
+
+    public boolean getIsActive() {
+        return this.isActive;
+    }
+    public void setIsActive(boolean isActive){
+        this.isActive = isActive;
     }
 
     public String getUserName() {

@@ -7,6 +7,7 @@ import bo.handlers.ProductService;
 import bo.handlers.SessionService;
 import bo.handlers.UserService;
 import db.exceptions.DbException;
+import ui.DTOs.ProductDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,26 +26,36 @@ public class CartServlet extends HttpServlet {
         String pathInfo = req.getPathInfo();
         String id = pathInfo.substring(1);
 
-        String l = req.getRequestURI();
-        System.out.println(l);
-
         try {
             SessionService sessionService = new SessionService(req.getSession());
-            if(l.startsWith("/cart/remove/")){
+            //handle remove from cart
+            if(req.getRequestURI().startsWith("/cart/remove/")){
                 sessionService.removeFromCart(id);
                 res.sendRedirect("/products");
                 return;
             }
 
-            Product p = ProductService.getById(id);
+            //handle add to cart
+            ProductDTO p = ProductService.getById(id);
             if(p == null){
+                req.setAttribute("code", 404);
+                req.setAttribute("message", "product with id "+ id + " not found!");
+                req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
                 return;
             }
+            if(p.getQuantity() == 0){
+                req.setAttribute("code", 400);
+                req.setAttribute("message", "The product: "+ p.getTitle() + "is currently out of stock");
+                req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
+                return;
+            }
+
             sessionService.addToCart(p);
             res.sendRedirect("/products");
         } catch (DbException e) {
-            e.printStackTrace();
-            throw new ServletException(e.getMessage());
+            req.setAttribute("code", 404);
+            req.setAttribute("message", e.getMessage());
+            req.getServletContext().getRequestDispatcher("/error.jsp").forward(req, res);
         }
     }
     @Override

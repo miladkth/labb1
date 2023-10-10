@@ -1,7 +1,10 @@
 package bo.entities;
 
+import ui.DTOs.ProductDTO;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Order {
@@ -31,12 +34,12 @@ public class Order {
     }
 
 
-    public Order(String userId, String shippingAddress) {
+    public Order(String userId, String shippingAddress, ArrayList<Product> products) {
         this.id = UUID.randomUUID().toString();
         this.userId = userId;
         this.fullFilled = false;
         this.shippingAddress = shippingAddress;
-        this.products = new ArrayList<>();
+        this.products = products;
     }
 
     public Order(){

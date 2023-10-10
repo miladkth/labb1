@@ -1,9 +1,7 @@
 package db;
 
-import bo.entities.Product;
 import bo.entities.User;
 import db.exceptions.DbException;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +19,28 @@ public class UserDB {
 
             return mapResultSet(rs);
         } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public void updateRole(String id, String newRole) throws DbException {
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement("update t_users set role = ? where id = ?");
+            pstm.setString(1, newRole);
+            pstm.setString(2, id);
+            pstm.executeUpdate();
+        }catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public void setBlockUser(String id, boolean isActive) throws DbException {
+        try {
+            PreparedStatement pstm = this.conn.prepareStatement("update t_users set isActive = ? where id = ?");
+            pstm.setBoolean(1, isActive);
+            pstm.setString(2, id);
+            pstm.executeUpdate();
+        }catch (SQLException e){
             throw new DbException(e.getMessage());
         }
     }
@@ -75,8 +95,9 @@ public class UserDB {
             String email = rs.getString("email");
             String password = rs.getString("password");
             String role = rs.getString("role");
+            boolean isActive = rs.getBoolean("isActive");
 
-            User user = new User(id,userName,password,role,email);
+            User user = new User(id,userName,password,role,email, isActive);
             users.add(user);
         }
         return users;

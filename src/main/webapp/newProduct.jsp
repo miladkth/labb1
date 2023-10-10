@@ -1,11 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: taquang
-  Date: 2023-10-04
-  Time: 12:16
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,13 +8,27 @@
 </head>
 <body>
 <div class="flex items-center justify-between p-6 fixed w-screen top-0 left-0">
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH7xrHqkvWlpD_z1VlB0HBSMz97qv8XTcHUO7ITp6yIijH5vvULsBd7Hehi7QOCXneRAg&usqp=CAU" class="w-20"/>
+  <a href="/products">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH7xrHqkvWlpD_z1VlB0HBSMz97qv8XTcHUO7ITp6yIijH5vvULsBd7Hehi7QOCXneRAg&usqp=CAU" class="w-20"/>
+  </a>
   <div class="flex items-center">
-    <a href="/admin/newProduct" class="mr-4 h-9 items-center rounded-full border border-solid border-black bg-black px-6 py-1 text-white">New Product</a>
+      <a href="/warehouse/newProduct" class="border-solid border border-black rounded-full px-6 py-1 bg-black text-white mr-4 h-9 items-center">New Product</a>
+      <a href="/warehouse/orders">
+        <img src="https://cdn-icons-png.flaticon.com/512/3496/3496156.png" class="mr-4 h-6 w-6" />
+      </a>
+
+
+    <c:if test = "${user!=null && user.role eq 'admin'}">
+      <a href="/admin/users">
+        <img src="https://cdn-icons-png.flaticon.com/512/78/78948.png" class="mr-4 h-6 w-6" />
+      </a>
+    </c:if>
+
     <a href="/user/logout"><img src="https://cdn-icons-png.flaticon.com/512/25/25706.png" class="h-6 w-6" /></a>
-  </div></div>
+  </div>
+</div>
   <div class="flex items-center justify-center min-h-screen">
-    <form action="/admin/newProduct" method="post" enctype="multipart/form-data" class="flex flex-col w-96">
+    <form action="/warehouse/newProduct" method="post" enctype="multipart/form-data" class="flex flex-col w-96">
       <h2 class="text-4xl font-bold mb-16">New product</h2>
       <p class="text-green-500 mb-4">${info}</p>
       <input type="text" name="title" placeholder="Title" class="outline-none h-10 border-b-2 border-black text-lg">

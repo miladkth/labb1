@@ -2,9 +2,11 @@ package filters;
 
 import bo.handlers.SessionService;
 import bo.entities.User;
+import ui.DTOs.UserDTO;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserAccessFilter implements Filter {
@@ -14,15 +16,23 @@ public class UserAccessFilter implements Filter {
         String uri = req.getRequestURI();
 
         SessionService session = new SessionService(req.getSession());
-        User user = session.getUser();
+        UserDTO user = session.getUser();
 
         if(user != null){
             filterChain.doFilter(request, response);
             return;
         }
 
-        System.out.println("user access filter");
-        System.out.println(uri);
+        if(uri.equals("/user/login")){
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if(uri.equals("/user/register")){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
+        HttpServletResponse res = (HttpServletResponse) response;
+        res.sendRedirect("/user/login");
     }
 }
